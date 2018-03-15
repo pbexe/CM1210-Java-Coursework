@@ -48,6 +48,7 @@ public class Student {
         Pattern patternPostcode = Pattern.compile("^[A-Z]{2}[0-9][A-Z]{2}$");
         Matcher matcherPostcode = patternPostcode.matcher(postcode);
         boolean matchFoundPostcode = matcherPostcode.matches();
+
         if (matchFoundName && matchFoundNumber && matchFoundId && matchFoundHouseNumber && matchFoundStreetName && matchFoundCourse && matchFoundTown && matchFoundPostcode){
             this.name = name;
             this.number = number;
