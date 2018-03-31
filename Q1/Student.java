@@ -3,10 +3,11 @@
 */
 
 import java.util.regex.Pattern;
+import java.io.Serializable;
 import java.util.regex.Matcher;
 
 
-public class Student {
+public class Student implements Serializable{
     private String name;
     private String number;
     private String course;
