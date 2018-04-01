@@ -2,17 +2,17 @@
 * Program
 */
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
 import java.lang.ClassNotFoundException;
+import java.util.InputMismatchException;
 
 public class Program {
 
@@ -80,7 +80,7 @@ public class Program {
             return s;
         }
 
-        public static List<Student> optionLoad() throws IOException{
+        public static List<Student> optionLoad(){
             // Repeatedly try until a valid file is loaded
             // TODO: Some sort of way to escape `while` loop instead of loading a file
             while (true){
@@ -112,5 +112,38 @@ public class Program {
                     System.out.println("Unable to load file\n");
                 }
             }
+        }
+        public static void optionSave(List<Student> students){
+            while (true) {
+            System.out.println("Please enter the path/filename that you wish to save:");
+            Scanner in = new Scanner(System.in);
+            String path = in.nextLine();
+            System.out.println("Would you like to save as:\n\t1. A binary file\n\t2. A text file?");
+            int choice;
+            while (true) {
+                if (in.hasNextInt()) {
+                    choice = in.nextInt();
+                    if (choice >= 3 || choice <= 0) {
+                        System.out.println("Please enter a valid number");
+                    } else {
+                        break;
+                    }
+                } else {
+                    System.out.println("Please enter a valid number");
+                    in.next();
+                }
+            }
+            try {
+                if (choice == 1) {
+                    save(true, path, students);
+                    return;
+                } else {
+                    save(false, path, students);
+                    return;
+                }
+            } catch (IOException e) {
+                System.out.println("Unable to save file\n");
+            }
+        }
         }
     }
