@@ -29,6 +29,10 @@ public class Student implements Serializable{
         setPostcode(postcode);
     }
 
+    public Student(){
+        ; // Allow building of the student class attribute by attribute
+    }
+
     /**
     * @return the name
     */
