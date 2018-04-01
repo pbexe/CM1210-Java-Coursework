@@ -16,6 +16,7 @@ public class Student implements Serializable{
     private String streetName;
     private String town;
     private String postcode;
+    static final long serialVersionUID = 1L;
 
     public Student(String name, String number, String course, String id, String houseNumber, String streetName, String town, String postcode) {
         setName(name);
