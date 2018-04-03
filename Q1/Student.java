@@ -2,12 +2,16 @@
 * Student
 */
 
-import java.util.regex.Pattern;
 import java.io.Serializable;
+import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 
 public class Student implements Serializable{
+    // Interface Serializable retrieved 03/04/18
+    // https://docs.oracle.com/javase/9/docs/api/java/io/Serializable.html
+
+    // Declare the attributes
     private String name;
     private String number;
     private String course;
@@ -16,9 +20,12 @@ public class Student implements Serializable{
     private String streetName;
     private String town;
     private String postcode;
-    static final long serialVersionUID = 1L;
+
+    // Used as a version number so that it can be checked whether the object being loaded is the same version as the class
+    static final long serialVersionUID = 14L;
 
     public Student(String name, String number, String course, String id, String houseNumber, String streetName, String town, String postcode) {
+        // Call each of the setters because they have validation on them
         setName(name);
         setNumber(number);
         setCourse(course);
@@ -41,7 +48,7 @@ public class Student implements Serializable{
     }
 
     /**
-    * @return the number
+    * @return the student number
     */
     public String getNumber() {
         return number;
@@ -55,21 +62,21 @@ public class Student implements Serializable{
     }
 
     /**
-    * @return the id
+    * @return the course id
     */
     public String getId() {
         return id;
     }
 
     /**
-    * @return the houseNumber
+    * @return the house number
     */
     public String getHouseNumber() {
         return houseNumber;
     }
 
     /**
-    * @return the streetName
+    * @return the street name
     */
     public String getStreetName() {
         return streetName;
@@ -89,14 +96,23 @@ public class Student implements Serializable{
         return postcode;
     }
 
+    public static boolean isValid(String patternString, String value) {
+        // Class Pattern retrieved 03/04/18
+        // https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(value);
+        boolean matches = matcher.matches();
+        return matches;
+    }
+
     /**
+    * Sets the name of the student and validates it
+    *
     * @param name the name to set
     */
     public void setName(String name) throws IllegalArgumentException {
-        Pattern patternName = Pattern.compile("^[A-z| ]+$");
-        Matcher matcherName = patternName.matcher(name);
-        boolean matchFoundName = matcherName.matches();
-        if (matchFoundName){
+        boolean match = isValid("^[A-z| ]+$", name);
+        if (match){
             this.name = name;
         } else {
             throw new IllegalArgumentException("Invalid name");
@@ -104,13 +120,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the ID of the student's course and validates it
+    *
     * @param id the id to set
     */
     public void setId(String id) throws IllegalArgumentException {
-        Pattern patternId = Pattern.compile("^[A-Z]{2}[0-9]{4}$");
-        Matcher matcherId = patternId.matcher(id);
-        boolean matchFoundId = matcherId.matches();
-        if (matchFoundId) {
+        boolean match = isValid("^[A-Z]{2}[0-9]{4}$", id);
+        if (match) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("Invalid ID");
@@ -118,13 +134,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the number of the student and validates it
+    *
     * @param number the number to set
     */
     public void setNumber(String number) throws IllegalArgumentException {
-        Pattern patternNumber = Pattern.compile("^C[1-9]{6}$");
-        Matcher matcherNumber = patternNumber.matcher(number);
-        boolean matchFoundNumber = matcherNumber.matches();
-        if (matchFoundNumber) {
+        boolean match = isValid("^C[1-9]{6}$", number);
+        if (match) {
             this.number = number;
         } else {
             throw new IllegalArgumentException("Invalid number");
@@ -132,13 +148,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the course of the student and validates it
+    *
     * @param course the course to set
     */
     public void setCourse(String course) throws IllegalArgumentException {
-        Pattern patternCourse = Pattern.compile("^[A-z| ]+$");
-        Matcher matcherCourse = patternCourse.matcher(course);
-        boolean matchFoundCourse = matcherCourse.matches();
-        if (matchFoundCourse) {
+        boolean match = isValid("^[A-z| ]+$", course);
+        if (match) {
             this.course = course;
         } else {
             throw new IllegalArgumentException("Invalid course");
@@ -146,13 +162,13 @@ public class Student implements Serializable{
     }
 
     /**
-    * @param houseNumber the houseNumber to set
+    * Sets the house number of the student and validates it
+    *
+    * @param houseNumber the house number to set
     */
     public void setHouseNumber(String houseNumber) throws IllegalArgumentException {
-        Pattern patternHouseNumber = Pattern.compile("^[0-9]+[A-z]?$");
-        Matcher matcherHouseNumber = patternHouseNumber.matcher(houseNumber);
-        boolean matchFoundHouseNumber = matcherHouseNumber.matches();
-        if (matchFoundHouseNumber) {
+        boolean match = isValid("^[0-9]+[A-z]?$", houseNumber);
+        if (match) {
             this.houseNumber = houseNumber;
         } else {
             throw new IllegalArgumentException("Invalid house number");
@@ -160,13 +176,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the street name of the student and validates it
+    *
     * @param streetName the streetName to set
     */
     public void setStreetName(String streetName) throws IllegalArgumentException {
-        Pattern patternStreetName = Pattern.compile("^[A-z| ]+$");
-        Matcher matcherStreetName = patternStreetName.matcher(streetName);
-        boolean matchFoundStreetName = matcherStreetName.matches();
-        if (matchFoundStreetName) {
+        boolean match = isValid("^[A-z| ]+$", streetName);
+        if (match) {
             this.streetName = streetName;
         } else {
             throw new IllegalArgumentException("Invalid street name");
@@ -174,13 +190,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the town of the student and validates it
+    *
     * @param town the town to set
     */
     public void setTown(String town) throws IllegalArgumentException {
-        Pattern patternTown = Pattern.compile("^[A-z| ]+$");
-        Matcher matcherTown = patternTown.matcher(town);
-        boolean matchFoundTown = matcherTown.matches();
-        if (matchFoundTown) {
+        boolean match = isValid("^[A-z| ]+$", town);
+        if (match) {
             this.town = town;
         } else {
             throw new IllegalArgumentException("Invalid town");
@@ -188,13 +204,13 @@ public class Student implements Serializable{
     }
 
     /**
+    * Sets the postcode of the student and validates it
+    *
     * @param postcode the postcode to set
     */
     public void setPostcode(String postcode) throws IllegalArgumentException {
-        Pattern patternPostcode = Pattern.compile("^[A-Z]{2}[0-9][A-Z]{2}$");
-        Matcher matcherPostcode = patternPostcode.matcher(postcode);
-        boolean matchFoundPostcode = matcherPostcode.matches();
-        if (matchFoundPostcode) {
+        boolean match = isValid("^[A-Z]{2}[0-9][A-Z]{2}$", postcode);
+        if (match) {
             this.postcode = postcode;
         } else {
             throw new IllegalArgumentException("Invalid postcode");
