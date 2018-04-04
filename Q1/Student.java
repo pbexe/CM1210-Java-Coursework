@@ -36,7 +36,7 @@ public class Student implements Serializable{
         setPostcode(postcode);
     }
 
-    public Student(){
+    public Student() {
         ; // Allow building of the student class attribute by attribute
     }
 
@@ -99,8 +99,11 @@ public class Student implements Serializable{
     public static boolean isValid(String patternString, String value) {
         // Class Pattern retrieved 03/04/18
         // https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html
+        // Instantiate pattern object
         Pattern pattern = Pattern.compile(patternString);
+        // Create a matcher object using this pattern
         Matcher matcher = pattern.matcher(value);
+        // Were there any matches?
         boolean matches = matcher.matches();
         return matches;
     }
