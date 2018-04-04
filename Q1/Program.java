@@ -170,18 +170,26 @@ public class Program {
      * @throws ClassNotFoundException Thrown when the student class loaded doesn't match the actual student class
      */
     public static List<Student> load(boolean binary, String path) throws IOException, ClassNotFoundException {
-        // TODO: Add error checking & text load
+        // Errors aren't caught in this method because the method calling this one catches them
         if (binary){
+            // Class ObjectInputStream retrieved 04/04/18
+            // https://docs.oracle.com/javase/9/docs/api/java/io/ObjectInputStream.html
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
             List<Student> s = (List<Student>) in.readObject();
             in.close();
             return s;
         } else {
+            // Create a new list of students
             List<Student> students = new ArrayList<Student>();
+            // Open the file
             File file = new File(path);
             Scanner scanner = new Scanner(file);
+            // For each line in the file
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                // Split The line by tabs
+                // Class Arrays retrieved 04/04/18
+                // https://docs.oracle.com/javase/9/docs/api/java/util/Arrays.html
                 List<String> values = new ArrayList<String>(Arrays.asList(line.split("\t")));
                 students.add(new Student(values.get(0), values.get(1), values.get(2), values.get(3), values.get(4), values.get(5), values.get(6), values.get(7)));
             }
@@ -189,15 +197,21 @@ public class Program {
         }
     }
 
+    /**
+     * Method that handles the user choosing which file to load
+     *
+     * @return List of students that have been loaded from the file
+     */
     public static List<Student> optionLoad() {
-        // Repeatedly try until a valid file is loaded
-        // TODO: Some sort of way to escape `while` loop instead of loading a file
+        // Get the file name and type. Repeat until valid
         while (true){
             System.out.println("Please enter the path/filename that you wish to load:");
+            // Get the user's input
             Scanner in = new Scanner(System.in);
             String path = in.nextLine();
             System.out.println("Is this:\n\t1. A binary file\n\t2. A text file?");
             int choice;
+            // Get the valid choice of binary/text
             while (true) {
                 if (in.hasNextInt()) {
                     choice = in.nextInt();
@@ -211,6 +225,7 @@ public class Program {
                     in.next();
                 }
             }
+            // Try loading a file based off of the user's entries
             try{
                 if (choice == 1){
                     return load(true, path);
@@ -218,17 +233,24 @@ public class Program {
                     return load(false, path);
                 }
             } catch (IOException | ClassNotFoundException e) {
+                // If there's an IO problem or the class loaded doesn't match the student class, repeat the method
                 System.out.println("Unable to load file\n");
             }
         }
     }
 
+    /**
+     * Handles the user saving
+     */
     public static void optionSave(List<Student> students) {
+        // Loop until the file had been saved
         while (true) {
-            System.out.println("Please enter the path/filename that you wish to save:");
+            System.out.println("Please enter the path/filename that you wish to save (eg data.tsv or students.dat):");
             Scanner in = new Scanner(System.in);
+            // Get the path to try and save the file at
             String path = in.nextLine();
             System.out.println("Would you like to save as:\n\t1. A binary file\n\t2. A text file?");
+            // Get whether it is binary or text
             int choice;
             while (true) {
                 if (in.hasNextInt()) {
@@ -243,6 +265,7 @@ public class Program {
                     in.next();
                 }
             }
+            // Try which ever type of save the user specified
             try {
                 if (choice == 1) {
                     save(true, path, students);
@@ -252,12 +275,19 @@ public class Program {
                     return;
                 }
             } catch (IOException e) {
+                // If there's a problem, tell the user and start the method again
                 System.out.println("Unable to save file\n");
             }
         }
     }
 
+    /**
+     * Handles user adding a student
+     *
+     * @return A student object
+     */
     public static Student optionAdd() {
+        // Declare all of the attributes that are going to be needed
         String name;
         String number;
         String course;
@@ -267,8 +297,10 @@ public class Program {
         String town;
         String postcode;
         Scanner in = new Scanner(System.in);
+        // Create a new blank student class
         Student student = new Student();
 
+        // Try setting the attribute. If it isn't valid, the student object will throw an exception and the user will have to enter new data
         while (true) {
             try {
                 System.out.println("Please enter the student's name:");
@@ -280,6 +312,7 @@ public class Program {
             }
         }
 
+        // These all work in the same way
         while (true) {
             try {
                 System.out.println("Please enter the student's number:");
@@ -358,11 +391,18 @@ public class Program {
             }
         }
 
+        // And finally return the student so it can be added to the main list of students
         return student;
     }
 
+    /**
+     * Displays a list of students
+     *
+     * @param students The students to display. May have undesired effects if the list is empty.
+     */
     public static void display(List<Student> students) {
         System.out.println("-----------------------------------");
+        // Iterate through the students printing each of their attributes
         for (Student student : students) {
             System.out.println("Name:        " + student.getName());
             System.out.println("Student No.: " + student.getNumber());
@@ -376,12 +416,20 @@ public class Program {
         }
     }
 
+    /**
+     * Handles displaying the students
+     *
+     * @param students The list of students to display
+     */
     public static void optionShow(List<Student> students) {
         Scanner in = new Scanner(System.in);
+        // If there are students
         if (students.size() > 0){
+            // The user can either see all of the students or a subset of them
             System.out.println("Would you like to view:");
             System.out.println("\t1. All of the relevant students");
             System.out.println("\t2. A subset of the relevant students");
+            // Get the user's choice
             int choice;
             while (true) {
                 if (in.hasNextInt()) {
@@ -397,11 +445,14 @@ public class Program {
                     in.next();
                 }
             }
+            // If they wish to see all of them, then just call the display method
             if (choice == 1) {
                 display(students);
             } else {
+                // If they wish to see a subset
                 System.out.println("There are " + Integer.toString(students.size()) + " relevant students");
                 System.out.println("Please enter starting student index (1 - " + Integer.toString(students.size()) + ")");
+                // Get the starting index
                 int startIndex;
                 while (true) {
                     if (in.hasNextInt()) {
@@ -418,6 +469,7 @@ public class Program {
                 }
 
                 System.out.println("Please enter ending student index (" + Integer.toString(startIndex) + " - " + Integer.toString(students.size()) + ")");
+                // Get the ending index. This can't be smaller than the starting index
                 int endIndex;
                 while (true) {
                     if (in.hasNextInt()) {
@@ -432,55 +484,89 @@ public class Program {
                         in.next();
                     }
                 }
-
+                // Uses the -1 because we want to include the one that the user said to start at
                 display(students.subList(startIndex - 1, endIndex));
             }
         } else {
+            // Tell the user there are no students to display
             System.out.println("There are no students to display");
         }
     }
 
+    /**
+     * Handles the user searching through courses
+     *
+     * @param students The list of students to search
+     */
     public static void optionSearchCourse(List<Student> students) {
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter a substring to search courses for:");
+        // Get the substring to search for
         String subString = in.nextLine();
+        // To store the matches
         List<Student> matches = new ArrayList<Student>();
+        // Iterate through the students
         for (Student student : students) {
+            // Uses lower case so it is case insensitive. Doesn't use regex because we don't want the user to be able to execute their own regex.
             if (student.getCourse().toLowerCase().contains(subString.toLowerCase())) {
+                // If it matches, add it to the list of matches
                 matches.add(student);
             }
         }
+        // Finally, show the matches
         optionShow(matches);
     }
 
+    /**
+     * Handles the user searching by addess
+     *
+     * @param students The students to search
+     */
     public static void optionSearchAddresses(List<Student> students) {
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter a substring to search address for:");
+        // Get the substring to search for
         String subString = in.nextLine();
+        // To store the matches
         List<Student> matches = new ArrayList<Student>();
+        // Iterate through the students
         for (Student student : students) {
+            // If the substring matches any of the following:
             if (student.getHouseNumber().toLowerCase().contains(subString.toLowerCase()) ||
                 student.getStreetName().toLowerCase().contains(subString.toLowerCase()) ||
                 student.getTown().toLowerCase().contains(subString.toLowerCase()) ||
                 student.getPostcode().toLowerCase().contains(subString.toLowerCase())) {
-                matches.add(student);
+                    // Add it to the list of matches
+                    matches.add(student);
             }
         }
+        // Finally, show the matches
         optionShow(matches);
     }
 
+    /**
+     * Handles the user deleting a student
+     *
+     * @param students The list of students to delete from
+     *
+     * @return The new list of students once the specified student has been deleted
+     */
     public static List<Student> optionDelete(List<Student> students) {
         System.out.println("Please enter the index of the student you wish to delete:");
         Scanner in = new Scanner(System.in);
+        // Get the user's choice of index they wish to delete
         int choice;
         while (true) {
             if (in.hasNextInt()) {
                 choice = in.nextInt();
+                // Try to delete it
                 try {
+                    // -1 because you start counting at 1, not 0
                     students.remove(choice - 1);
                     System.out.println("Deleted student " + Integer.toString(choice));
                     break;
                 } catch (IndexOutOfBoundsException e) {
+                    // If there's an error, make the user pick again
                     System.out.println("This index doesn't exist");
                 }
             } else {
@@ -488,6 +574,7 @@ public class Program {
                 in.next();
             }
         }
+        // Finally, return the new list of students
         return students;
     }
 }
