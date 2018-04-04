@@ -6,7 +6,11 @@ import java.io.Serializable;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-
+/**
+ * Class that represents an individual student
+ *
+ * @see Program
+ */
 public class Student implements Serializable{
     // Interface Serializable retrieved 03/04/18
     // https://docs.oracle.com/javase/9/docs/api/java/io/Serializable.html
@@ -24,6 +28,18 @@ public class Student implements Serializable{
     // Used as a version number so that it can be checked whether the object being loaded is the same version as the class
     static final long serialVersionUID = 14L;
 
+    /**
+     * Main constructor for the student
+     *
+     * @param name The name of the student
+     * @param number The student's number
+     * @param course The course that the student is currently doing
+     * @param id The ID of that course
+     * @param houseNumber The house number of the student
+     * @param streetName The name of the student's street
+     * @param town The town that the student lives in
+     * @param postcode The student's postcode
+     */
     public Student(String name, String number, String course, String id, String houseNumber, String streetName, String town, String postcode) {
         // Call each of the setters because they have validation on them
         setName(name);
@@ -36,8 +52,11 @@ public class Student implements Serializable{
         setPostcode(postcode);
     }
 
+    /**
+     * Allow building of the student class attribute by attribute
+     */
     public Student() {
-        ; // Allow building of the student class attribute by attribute
+        ;
     }
 
     /**
