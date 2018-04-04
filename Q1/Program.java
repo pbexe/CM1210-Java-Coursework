@@ -16,28 +16,51 @@ import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
 import java.util.InputMismatchException;
 
+/**
+ * The main class of the project that contains the main method. To run the project, run this class
+ *
+ * @see Student
+ */
 public class Program {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException{
+    /**
+     * The main method that is the entry-point at runtime
+     *
+     * @param args The arguments can be passed to the program
+    */
+    public static void main(String[] args){
 
+        // This is the list of all students currently loaded into the program
         List<Student> students = new ArrayList<Student>();
+
+        // Scanner to get the user's input
         Scanner in = new Scanner(System.in);
+
+        // Store the user's input
         int choice;
+
+        // True whilst the user wants the program to continue running
         boolean running = true;
         while (running){
+            // Display all of the menu options
             System.out.println("");
             System.out.println("Please select an option:");
             System.out.println("\t1. Load student data from file");
             System.out.println("\t2. Save student data to file");
             System.out.println("\t3. Add a student");
             System.out.println("\t4. View students");
-            System.out.println("\t5. Quit");
+            System.out.println("\t5. Delete a student by index");
+            System.out.println("\t6. Quit");
             System.out.println("");
+            // If the user has entered an int
             if (in.hasNextInt()){
+                // Get the int
                 choice = in.nextInt();
+                // If it is not a valid menu choice
                 if (choice >= 9 || choice <= 0){
                     System.out.println("Please enter a valid input");
                 } else {
+                    // Therefore a valid menu choice so get which choice it was and call the appropriate method
                     switch (choice) {
                         case 1:
                         students = optionLoad();
@@ -52,6 +75,9 @@ public class Program {
                         filterMenu(students);
                         break;
                         case 5:
+                        students = optionDelete(students);
+                        break;
+                        case 6:
                         running = false;
                         break;
                         default:
@@ -59,19 +85,27 @@ public class Program {
                     }
                 }
             } else {
+                // Else the user hasn't entered an int
                 System.out.println("Please enter a valid input");
                 in.next();
             }
         }
     }
 
+    /**
+     * Displays the menu that shows all of the options for displaying students
+     *
+     * @param students List of all students. Doesn't use parent's list of students for explicitness so the method can be easily reused
+     */
     public static void filterMenu(List<Student> students) {
+         // Get the user's choice
         Scanner in = new Scanner(System.in);
         System.out.println("Please select an option:");
         System.out.println("\t1. View all students");
         System.out.println("\t2. Filter by address");
         System.out.println("\t3. Filter by course");
 
+        // Standard validaiton
         int choice;
         while (true) {
             if (in.hasNextInt()) {
@@ -87,6 +121,8 @@ public class Program {
                 in.next();
             }
         }
+
+        // Act appropriately based off of the input
         if (choice == 1) {
             optionShow(students);
         } else if (choice == 2) {
@@ -96,13 +132,26 @@ public class Program {
         }
     }
 
+    /**
+     * Saves the students to a file
+     *
+     * @param binary Whether the user wants to save as plaintext or binary
+     * @param path The path to the file the user wants to save to. If the file doesn't exist, then a new *empty* one will be created
+     * @param students The list of students to save
+     *
+     * @throws IOException
+    */
     public static void save(boolean binary, String path, List<Student> students) throws IOException {
         if (binary){
+            // Class ObjectOutputStream retrieved 04/04/18
+            // https://docs.oracle.com/javase/9/docs/api/java/io/ObjectOutputStream.html
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
+            // Serialize object. Very similar to python pickle
             out.writeObject(students);
             out.close();
         }
         else {
+            // Save each student as a new line in a .tsv style file
             PrintWriter writer = new PrintWriter(path, "UTF-8");
             for (Student student : students) {
                 writer.println(student.getName() + "\t" + student.getNumber() + "\t" + student.getCourse() + "\t" + student.getId() + "\t" + student.getHouseNumber() + "\t" + student.getStreetName() + "\t" + student.getTown() + "\t" + student.getPostcode());
@@ -111,6 +160,15 @@ public class Program {
         }
     }
 
+    /**
+     * Load students' details from a file
+     *
+     * @param binary Whether the file loaded is binary or text
+     * @param path The path of the file to load
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException Thrown when the student class loaded doesn't match the actual student class
+     */
     public static List<Student> load(boolean binary, String path) throws IOException, ClassNotFoundException {
         // TODO: Add error checking & text load
         if (binary){
@@ -409,5 +467,27 @@ public class Program {
             }
         }
         optionShow(matches);
+    }
+
+    public static List<Student> optionDelete(List<Student> students) {
+        System.out.println("Please enter the index of the student you wish to delete:");
+        Scanner in = new Scanner(System.in);
+        int choice;
+        while (true) {
+            if (in.hasNextInt()) {
+                choice = in.nextInt();
+                try {
+                    students.remove(choice - 1);
+                    System.out.println("Deleted student " + Integer.toString(choice));
+                    break;
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("This index doesn't exist");
+                }
+            } else {
+                System.out.println("Please enter a valid option");
+                in.next();
+            }
+        }
+        return students;
     }
 }
