@@ -115,6 +115,14 @@ public class Student implements Serializable{
         return postcode;
     }
 
+    /**
+     * Validator for each of the attributes
+     *
+     * @param patternString The pattern that shall be validated against
+     * @param value The value that shall be validated
+     *
+     * @return Whether patternString is valid or not
+     */
     public static boolean isValid(String patternString, String value) {
         // Class Pattern retrieved 03/04/18
         // https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html
