@@ -30,11 +30,8 @@ public class Program {
             System.out.println("\t1. Load student data from file");
             System.out.println("\t2. Save student data to file");
             System.out.println("\t3. Add a student");
-            System.out.println("\t4. Display all students");
-            System.out.println("\t5. Search students by course");
-            System.out.println("\t6. Search student addresses");
-            System.out.println("\t7. Display subset of students");
-            System.out.println("\t8. Quit");
+            System.out.println("\t4. View students");
+            System.out.println("\t5. Quit");
             System.out.println("");
             if (in.hasNextInt()){
                 choice = in.nextInt();
@@ -52,16 +49,9 @@ public class Program {
                         students.add(optionAdd());
                         break;
                         case 4:
-                        optionShowAll(students);
+                        filterMenu(students);
                         break;
                         case 5:
-                        optionSearchCourse(students);
-                        break;
-                        case 6:
-                        break;
-                        case 7:
-                        break;
-                        case 8:
                         running = false;
                         break;
                         default:
@@ -72,6 +62,37 @@ public class Program {
                 System.out.println("Please enter a valid input");
                 in.next();
             }
+        }
+    }
+
+    public static void filterMenu(List<Student> students) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please select an option:");
+        System.out.println("\t1. View all students");
+        System.out.println("\t2. Filter by address");
+        System.out.println("\t3. Filter by course");
+
+        int choice;
+        while (true) {
+            if (in.hasNextInt()) {
+                choice = in.nextInt();
+                System.out.println("Got int");
+                if (choice != 1 && choice != 2 && choice != 3) {
+                    System.out.println("Please enter a valid option");
+                } else {
+                    break;
+                }
+            } else {
+                System.out.println("Please enter a valid option");
+                in.next();
+            }
+        }
+        if (choice == 1) {
+            optionShow(students);
+        } else if (choice == 2) {
+            optionSearchAddresses(students);
+        } else if (choice == 3) {
+            optionSearchCourse(students);
         }
     }
 
@@ -282,19 +303,79 @@ public class Program {
         return student;
     }
 
-    public static void optionShowAll(List<Student> students) {
-        if (students.size() > 0){
+    public static void display(List<Student> students) {
+        System.out.println("-----------------------------------");
+        for (Student student : students) {
+            System.out.println("Name:        " + student.getName());
+            System.out.println("Student No.: " + student.getNumber());
+            System.out.println("Course Name: " + student.getCourse());
+            System.out.println("Course ID:   " + student.getId());
+            System.out.println("House No.:   " + student.getHouseNumber());
+            System.out.println("Street Name: " + student.getStreetName());
+            System.out.println("Town:        " + student.getTown());
+            System.out.println("Postcode:    " + student.getPostcode());
             System.out.println("-----------------------------------");
-            for (Student student : students) {
-                System.out.println("Name:        " + student.getName());
-                System.out.println("Student No.: " + student.getNumber());
-                System.out.println("Course Name: " + student.getCourse());
-                System.out.println("Course ID:   " + student.getId());
-                System.out.println("House No.:   " + student.getHouseNumber());
-                System.out.println("Street Name: " + student.getStreetName());
-                System.out.println("Town:        " + student.getTown());
-                System.out.println("Postcode:    " + student.getPostcode());
-                System.out.println("-----------------------------------");
+        }
+    }
+
+    public static void optionShow(List<Student> students) {
+        Scanner in = new Scanner(System.in);
+        if (students.size() > 0){
+            System.out.println("Would you like to view:");
+            System.out.println("\t1. All of the relevant students");
+            System.out.println("\t2. A subset of the relevant students");
+            int choice;
+            while (true) {
+                if (in.hasNextInt()) {
+                    choice = in.nextInt();
+                    System.out.println("Got int");
+                    if (choice != 1 && choice != 2) {
+                        System.out.println("Please enter a valid option");
+                    } else {
+                        break;
+                    }
+                } else {
+                    System.out.println("Please enter a valid option");
+                    in.next();
+                }
+            }
+            if (choice == 1) {
+                display(students);
+            } else {
+                System.out.println("There are " + Integer.toString(students.size()) + " relevant students");
+                System.out.println("Please enter starting student index (1 - " + Integer.toString(students.size()) + ")");
+                int startIndex;
+                while (true) {
+                    if (in.hasNextInt()) {
+                        startIndex = in.nextInt();
+                        if (startIndex > students.size() || startIndex < 1) {
+                            System.out.println("Please enter a valid option");
+                        } else {
+                            break;
+                        }
+                    } else {
+                        System.out.println("Please enter a valid option");
+                        in.next();
+                    }
+                }
+
+                System.out.println("Please enter ending student index (" + Integer.toString(startIndex) + " - " + Integer.toString(students.size()) + ")");
+                int endIndex;
+                while (true) {
+                    if (in.hasNextInt()) {
+                        endIndex = in.nextInt();
+                        if (endIndex < startIndex || endIndex > students.size()) {
+                            System.out.println("Please enter a valid option");
+                        } else {
+                            break;
+                        }
+                    } else {
+                        System.out.println("Please enter a valid option");
+                        in.next();
+                    }
+                }
+
+                display(students.subList(startIndex - 1, endIndex));
             }
         } else {
             System.out.println("There are no students to display");
@@ -311,6 +392,22 @@ public class Program {
                 matches.add(student);
             }
         }
-        optionShowAll(matches);
+        optionShow(matches);
+    }
+
+    public static void optionSearchAddresses(List<Student> students) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please enter a substring to search address for:");
+        String subString = in.nextLine();
+        List<Student> matches = new ArrayList<Student>();
+        for (Student student : students) {
+            if (student.getHouseNumber().toLowerCase().contains(subString.toLowerCase()) ||
+                student.getStreetName().toLowerCase().contains(subString.toLowerCase()) ||
+                student.getTown().toLowerCase().contains(subString.toLowerCase()) ||
+                student.getPostcode().toLowerCase().contains(subString.toLowerCase())) {
+                matches.add(student);
+            }
+        }
+        optionShow(matches);
     }
 }
