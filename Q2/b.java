@@ -1,11 +1,12 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * b
- *
- * @see a
- */
+* b
+*
+* @see a
+*/
 public class b {
 
     /**
@@ -16,14 +17,16 @@ public class b {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         // Get the user's input
+        System.out.println("To win, you must make a magic square where all of the columns, rows, and diagonals sum to the same number");
+        System.out.println("Please enter the size of the magic square you wish to solve (Odd number):");
         int choice;
         while (true) {
             // It must be an int
             if (in.hasNextInt()) {
                 choice = in.nextInt();
                 // And it must be odd
-                if (choice % 2 == 0) {
-                    System.out.println("Please enter an odd number");
+                if (choice % 2 == 0 || choice <= 0) {
+                    System.out.println("Please enter an odd, positive number");
                 } else {
                     break;
                 }
@@ -32,21 +35,81 @@ public class b {
                 in.next();
             }
         }
-        // Finally, calculate the square and display it
-        System.out.println("Should be true:");
-        System.out.println(isValid(generateSquare(choice)));
-        System.out.println("Should be false:");
-        System.out.println(isValid(shuffle(generateSquare(choice))));
-        printSquare(shuffle(generateSquare(choice)));
+        int[][] square = generateSquare(choice);
+        square = shuffle(square);
+        boolean completed = false;
+        in.nextLine();
+        System.out.println("Please enter movement commands in the format i j k where i and j are coordinates and k is the direction you wish to move (U, D, L, R)");
+        while (! completed) {
+            printSquare(square);
+            String input;
+            int n = square.length;
+            int temp;
+            while (true) {
+                // There must be a next line
+                if (in.hasNextLine()) {
+                    input = in.nextLine();
+                    try {
+                        String[] arguments = input.split("\\s+");
+                        int x = Integer.parseInt(arguments[0]);
+                        x -= 1;
+                        int y = Integer.parseInt(arguments[1]);
+                        y -= 1;
+                        if (!arguments[2].toUpperCase().equals("U") &&
+                        !arguments[2].toUpperCase().equals("D") &&
+                        !arguments[2].toUpperCase().equals("L") &&
+                        !arguments[2].toUpperCase().equals("R")) {
+                            throw new NoSuchFieldException();
+                        }
+                        switch (arguments[2]) {
+                            case "D":
+                            temp = square[normalize(y, n)][normalize(x, n)];
+                            square[normalize(y, n)][normalize(x, n)] = square[normalize(y + 1, n)][normalize(x, n)];
+                            square[normalize(y + 1, n)][normalize(x, n)] = temp;
+                            break;
+                            case "L":
+                            temp = square[normalize(y, n)][normalize(x, n)];
+                            square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n)][normalize(x - 1, n)];
+                            square[normalize(y, n)][normalize(x - 1, n)] = temp;
+                            break;
+                            case "U":
+                            temp = square[normalize(y, n)][normalize(x, n)];
+                            square[normalize(y, n)][normalize(x, n)] = square[normalize(y - 1, n)][normalize(x, n)];
+                            square[normalize(y - 1, n)][normalize(x, n)] = temp;
+                            break;
+                            case "R":
+                            temp = square[normalize(y, n)][normalize(x, n)];
+                            square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n)][normalize(x + 1, n)];
+                            square[normalize(y, n)][normalize(x + 1, n)] = temp;
+                            break;
+                            default:
+                            break;
+                        }
+                        break;
+                    } catch (PatternSyntaxException | NumberFormatException | NoSuchFieldException | ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Invalid Input");
+                    }
+                } else {
+                    System.out.println("Please enter a command");
+                    in.next();
+                }
+            }
+            if (isValid(square)) {
+                completed = true;
+            }
+
+        }
+        printSquare(square);
+        System.out.println("You win!");
     }
 
     /**
-     * Checks if the magic square is valid
-     *
-     * @param square The magic square that is besing checked
-     *
-     * @return Whether the magic square is valid
-     */
+    * Checks if the magic square is valid
+    *
+    * @param square The magic square that is being checked
+    *
+    * @return Whether the magic square is valid
+    */
     public static boolean isValid(int[][] square) {
         // Get the length of the sides
         int n = square.length;
@@ -82,7 +145,7 @@ public class b {
         // Diagonal from origin
         total = 0;
         for (int x = 0; x < n; x++) {
-                    total += square[x][x];
+            total += square[x][x];
         }
         if (total != correctTotal) {
             isValid = false;
@@ -101,12 +164,12 @@ public class b {
     }
 
     /**
-     * Shuffles the magic square item by item n^2 times
-     *
-     * @param square The magic square
-     *
-     * @return The shuffled magic square
-     */
+    * Shuffles the magic square item by item n^2 times
+    *
+    * @param square The magic square
+    *
+    * @return The shuffled magic square
+    */
     public static int[][] shuffle(int[][] square) {
         // Get the size of the square
         int n = square.length;
@@ -130,8 +193,8 @@ public class b {
                 break;
                 case 1:
                 temp = square[normalize(y, n)][normalize(x, n)];
-                square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n + 1)][normalize(x, n)];
-                square[normalize(y, n + 1)][normalize(x, n)] = temp;
+                square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n)][normalize(x + 1, n)];
+                square[normalize(y, n)][normalize(x + 1, n)] = temp;
                 break;
                 case 2:
                 temp = square[normalize(y, n)][normalize(x, n)];
@@ -140,8 +203,8 @@ public class b {
                 break;
                 case 3:
                 temp = square[normalize(y, n)][normalize(x, n)];
-                square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n - 1)][normalize(x, n)];
-                square[normalize(y, n - 1)][normalize(x, n)] = temp;
+                square[normalize(y, n)][normalize(x, n)] = square[normalize(y, n)][normalize(x - 1, n)];
+                square[normalize(y, n)][normalize(x - 1, n)] = temp;
                 break;
                 default:
                 break;
