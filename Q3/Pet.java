@@ -1,7 +1,7 @@
 /**
  * Pet
  */
-public class Pet {
+abstract public class Pet {
 
     private boolean isAlive;
     private boolean isHungry;
@@ -16,6 +16,8 @@ public class Pet {
         this.weight = weight;
         this.name = name;
     }
+
+    abstract public void makeNoise();
 
     /**
      * Sets whether the animal is alive
@@ -63,27 +65,35 @@ public class Pet {
     }
 
     /**
-     * @return the age
+     * Gets the age
+     *
+     * @return The age
      */
     public int getAge() {
         return age;
     }
 
     /**
-     * @return the name
+     * Gets the name
+     *
+     * @return The name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return the weight
+     * Gets the weight
+     *
+     * @return The weight
      */
     public float getWeight() {
         return weight;
     }
 
     /**
+     * Gets whether it is alive
+     *
      * @return Is alive
      */
     public boolean getIsAlive() {
@@ -91,6 +101,8 @@ public class Pet {
     }
 
     /**
+     * Gets whether it is hungry
+     *
      * @return Is Hungry
      */
     public boolean getIsHungry() {
