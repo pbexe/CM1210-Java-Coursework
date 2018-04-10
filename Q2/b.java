@@ -35,32 +35,39 @@ public class b {
                 in.next();
             }
         }
+        // Generate the magic square
         int[][] square = generateSquare(choice);
+        // Shuffle the square
         square = shuffle(square);
+        // Whether the puzzle has been completed or not
         boolean completed = false;
+        // Clear the current input
         in.nextLine();
         System.out.println("Please enter movement commands in the format i j k where i and j are coordinates and k is the direction you wish to move (U, D, L, R)");
+        // Loop until the puzzle is completed
         while (! completed) {
+            // Output the magic square
             printSquare(square);
+            // Stores the input
             String input;
+            // Get the side lengths of the square
             int n = square.length;
             int temp;
+            // Loop until a valid input
             while (true) {
                 // There must be a next line
                 if (in.hasNextLine()) {
+                    // Get the next line
                     input = in.nextLine();
                     try {
+                        // Split by whitespace using regex
                         String[] arguments = input.split("\\s+");
+                        // Extract the x and y coordinates
                         int x = Integer.parseInt(arguments[0]);
                         x -= 1;
                         int y = Integer.parseInt(arguments[1]);
                         y -= 1;
-                        if (!arguments[2].toUpperCase().equals("U") &&
-                        !arguments[2].toUpperCase().equals("D") &&
-                        !arguments[2].toUpperCase().equals("L") &&
-                        !arguments[2].toUpperCase().equals("R")) {
-                            throw new NoSuchFieldException();
-                        }
+                        // For each direction possible, swap the specified item with the adjacent one in the specified direction
                         switch (arguments[2]) {
                             case "D":
                             temp = square[normalize(y, n)][normalize(x, n)];
@@ -83,7 +90,8 @@ public class b {
                             square[normalize(y, n)][normalize(x + 1, n)] = temp;
                             break;
                             default:
-                            break;
+                            // If it is none of these, throw an error
+                            throw new NoSuchFieldException();
                         }
                         break;
                     } catch (PatternSyntaxException | NumberFormatException | NoSuchFieldException | ArrayIndexOutOfBoundsException e) {
@@ -95,10 +103,12 @@ public class b {
                 }
             }
             if (isValid(square)) {
+                // Once the square is valid, the puzzle is complete
                 completed = true;
             }
 
         }
+        // Tell the user they have won
         printSquare(square);
         System.out.println("You win!");
     }
