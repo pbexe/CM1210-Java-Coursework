@@ -11,11 +11,9 @@ abstract public class Fish extends Pet{
         System.out.println("*Fishy noise*");
     }
 
-    public void eat() {
-        setWeight(getWeight() + 1);
-        setIsHungry(false);
-        if (getWeight() > 5) {
-            setIsAlive(false);
-        }
+    public void swim() {
+        setIsHungry(true);
+        setWeight(getWeight() - 1);
     }
+
 }

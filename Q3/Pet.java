@@ -28,6 +28,14 @@ abstract public class Pet {
     abstract public void eat();
 
     /**
+     * Gets the colour of the animal
+     *
+     * @return The colour of the animal
+     */
+    abstract public String getColour();
+
+
+    /**
      * Outputs a description of the object
      *
      * @return A description of the object
