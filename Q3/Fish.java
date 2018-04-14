@@ -1,7 +1,7 @@
 /**
  * Fish
  */
-public class Fish extends Pet{
+abstract public class Fish extends Pet{
 
     public Fish(boolean isAlive, boolean isHungry, int age, float weight, String name) {
         super(isAlive, isHungry, age, weight, name);
