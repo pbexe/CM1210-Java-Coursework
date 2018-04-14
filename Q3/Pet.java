@@ -17,7 +17,25 @@ abstract public class Pet {
         this.name = name;
     }
 
+    /**
+     * Makes a noise
+     */
     abstract public void makeNoise();
+
+    /**
+     * Animal eats and updates statistics appropriately
+     */
+    abstract public void eat();
+
+    /**
+     * Outputs a description of the object
+     *
+     * @return A description of the object
+     */
+    @Override
+    public String toString(){
+        return "A pet called " + name;
+    }
 
     /**
      * Sets whether the animal is alive
