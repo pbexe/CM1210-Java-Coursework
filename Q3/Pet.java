@@ -9,6 +9,15 @@ abstract public class Pet {
     private float weight;
     private String name;
 
+    /**
+     * Constructor for the {@code Pet} class
+     *
+     * @param isAlive Whether the pet is alive
+     * @param isHungry Whether the pet is hungry
+     * @param age The age of the pet
+     * @param weight The weight of the pet
+     * @param name The name of the pet
+     */
     public Pet(boolean isAlive, boolean isHungry, int age, float weight, String name) {
         this.isAlive = isAlive;
         this.isHungry = isHungry;
