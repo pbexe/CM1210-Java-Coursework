@@ -43,7 +43,7 @@ public class b {
         boolean completed = false;
         // Clear the current input
         in.nextLine();
-        System.out.println("Please enter movement commands in the format i j k where i and j are coordinates and k is the direction you wish to move (U, D, L, R)");
+        System.out.println("Please enter movement commands in the format i j k where i and j are x and y coordinates respectively and k is the direction you wish to move (U, D, L, R)");
         // Loop until the puzzle is completed
         while (! completed) {
             // Output the magic square
