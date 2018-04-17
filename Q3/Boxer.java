@@ -27,7 +27,7 @@ public class Boxer extends Dog{
     }
 
     /**
-     * Make the springer spaniel eat and adjust its attributes accordingly
+     * Make the boxer eat and adjust its attributes accordingly
      */
     public void eat() {
         setWeight(getWeight() + 1);
