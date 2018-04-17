@@ -433,7 +433,6 @@ public class Program {
             while (true) {
                 if (in.hasNextInt()) {
                     choice = in.nextInt();
-                    System.out.println("Got int");
                     if (choice != 1 && choice != 2) {
                         System.out.println("Please enter a valid option");
                     } else {
