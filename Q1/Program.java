@@ -105,12 +105,11 @@ public class Program {
         System.out.println("\t2. Filter by address");
         System.out.println("\t3. Filter by course");
 
-        // Standard validaiton
+        // Standard validation
         int choice;
         while (true) {
             if (in.hasNextInt()) {
                 choice = in.nextInt();
-                System.out.println("Got int");
                 if (choice != 1 && choice != 2 && choice != 3) {
                     System.out.println("Please enter a valid option");
                 } else {

@@ -161,7 +161,7 @@ public class b {
             isValid = false;
         }
 
-        // Disgonal from opposite origin
+        // Diagonal from opposite origin
         total = 0;
         for (int x = 0; x < n; x++) {
             total += square[n - x - 1][n - x - 1];
